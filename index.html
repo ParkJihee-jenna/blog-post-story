@@ -21,11 +21,12 @@
   .seg{display:flex;gap:8px}
   .seg button{flex:1;font:inherit;font-size:14px;letter-spacing:-.224px;padding:12px 16px;border-radius:9999px;background:var(--canvas);color:var(--ink);border:1px solid var(--hairline)}
   .seg button.on{border:2px solid var(--focus);padding:11px 15px}
-  input[type=text]{width:100%;font:inherit;padding:12px 20px;height:44px;border:1px solid rgba(0,0,0,.08);border-radius:9999px;background:var(--canvas);color:var(--ink)}
+  input[type=text],input[type=number]{width:100%;font:inherit;padding:12px 20px;height:44px;border:1px solid rgba(0,0,0,.08);border-radius:9999px;background:var(--canvas);color:var(--ink)}
   .file{display:block;text-align:center;color:var(--primary);cursor:pointer}
   .file input{display:none}
   .row{display:flex;align-items:center;justify-content:space-between}
-  .row input{width:20px;height:20px;accent-color:var(--primary)}
+  .row input[type=number]{width:96px;text-align:center;padding:0 12px}
+  .row input[type=checkbox]{width:20px;height:20px;accent-color:var(--primary)}
   .cta{justify-self:center;border:0;background:var(--primary);color:#fff;font:inherit;padding:11px 22px;border-radius:9999px;margin-top:20px;min-height:44px}
   button,.file{transition:transform .1s}
   button:active,.file:active{transform:scale(.95)}
@@ -55,12 +56,18 @@
       <input id="cap" type="text" value="머리 이쁘다." maxlength="60" aria-label="캡션">
       <div class="row"><label for="bw">흑백</label><input id="bw" type="checkbox"></div>
     </div>
+    <div class="card">
+      <div class="title">공감 · 댓글 · 공유</div>
+      <div class="row"><label for="bar">하단 바 표시</label><input id="bar" type="checkbox" checked></div>
+      <div class="row"><label for="likes">공감</label><input id="likes" type="number" min="0" value="24" inputmode="numeric"></div>
+      <div class="row"><label for="cmts">댓글</label><input id="cmts" type="number" min="0" value="7" inputmode="numeric"></div>
+    </div>
     <button class="cta" id="save">스토리 이미지 저장</button>
   </div>
 </main>
 <script>
 const W=1080,H=1920,cv=document.getElementById('cv'),ctx=cv.getContext('2d');
-let mode=1,imgs=[];
+let mode=1,imgs=[];const pad0=60;
 
 document.querySelectorAll('#mode button').forEach(b=>b.onclick=()=>{
   document.querySelectorAll('#mode button').forEach(x=>x.classList.toggle('on',x===b));
@@ -73,7 +80,7 @@ document.getElementById('file').onchange=async e=>{
   imgs=await Promise.all(files.map(f=>new Promise(r=>{const i=new Image();i.onload=()=>r(i);i.src=URL.createObjectURL(f)})));
   draw();
 };
-['cap','bw'].forEach(id=>document.getElementById(id).oninput=draw);
+['cap','bw','bar','likes','cmts'].forEach(id=>document.getElementById(id).oninput=draw);
 
 function cover(img,x,y,w,h){
   const s=Math.max(w/img.width,h/img.height),sw=w/s,sh=h/s;
@@ -106,6 +113,28 @@ function draw(){
   ctx.filter='none';
   ctx.fillStyle='#777';ctx.font='30px "Nanum Gothic"';ctx.textAlign='center';ctx.textBaseline='top';
   ctx.fillText(document.getElementById('cap').value,W/2,top+ph+48);
+  if(document.getElementById('bar').checked) drawBar(top+ph+170);
+}
+function drawBar(y){
+  const g='#8e8e8e';
+  ctx.fillStyle='#ebebeb';ctx.fillRect(pad0,y-40,W-pad0*2,2);
+  ctx.strokeStyle=g;ctx.lineWidth=3.5;ctx.lineJoin='round';ctx.lineCap='round';
+  // heart
+  let x=pad0+8;
+  ctx.beginPath();ctx.moveTo(x+18,y+32);
+  ctx.bezierCurveTo(x-6,y+14,x,y-2,x+10,y);ctx.bezierCurveTo(x+15,y+1,x+18,y+6,x+18,y+8);
+  ctx.bezierCurveTo(x+18,y+6,x+21,y+1,x+26,y);ctx.bezierCurveTo(x+36,y-2,x+42,y+14,x+18,y+32);ctx.stroke();
+  ctx.fillStyle=g;ctx.font='30px "Nanum Gothic"';ctx.textAlign='left';ctx.textBaseline='middle';
+  const t1='공감 '+(+document.getElementById('likes').value||0);
+  ctx.fillText(t1,x+54,y+16);
+  // comment bubble
+  x=x+54+ctx.measureText(t1).width+48;
+  ctx.beginPath();ctx.roundRect(x,y,38,28,8);ctx.moveTo(x+10,y+28);ctx.lineTo(x+8,y+38);ctx.lineTo(x+20,y+28);ctx.stroke();
+  ctx.fillText('댓글 '+(+document.getElementById('cmts').value||0),x+54,y+16);
+  // share
+  x=W-pad0-40;
+  ctx.beginPath();ctx.moveTo(x+18,y+26);ctx.lineTo(x+18,y-2);ctx.moveTo(x+8,y+8);ctx.lineTo(x+18,y-2);ctx.lineTo(x+28,y+8);
+  ctx.moveTo(x+4,y+16);ctx.lineTo(x+4,y+34);ctx.lineTo(x+32,y+34);ctx.lineTo(x+32,y+16);ctx.stroke();
 }
 document.getElementById('save').onclick=()=>cv.toBlob(async blob=>{
   const file=new File([blob],'blog-story.png',{type:'image/png'});
