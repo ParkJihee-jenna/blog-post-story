@@ -49,6 +49,7 @@
   .row.sub input[type=checkbox]{width:18px;height:18px}
   .row input[type=number]{height:36px}
   .card.roomy{gap:20px}
+  input::placeholder{color:#b8b8bd}
 </style>
 <script>
 // Google Analytics 4 — 측정 ID(G-XXXX)를 넣으면 방문자·MAU 집계 시작
@@ -78,13 +79,13 @@ gtag('js',new Date());if(GA_ID)gtag('config',GA_ID);
     </div>
     <div class="card">
       <div class="title">캡션</div>
-      <input id="cap" type="text" value="머리 이쁘다." maxlength="60" aria-label="캡션">
+      <input id="cap" type="text" placeholder="머리 이쁘다." maxlength="60" aria-label="캡션">
     </div>
     <div class="card roomy">
       <div class="title">공감 · 댓글 · 공유</div>
       <div class="row chk"><label for="bar">하단 바 표시</label><input id="bar" type="checkbox" checked></div>
-      <div class="row"><label for="likes">공감</label><input id="likes" type="number" min="0" value="24" inputmode="numeric"></div>
-      <div class="row"><label for="cmts">댓글</label><input id="cmts" type="number" min="0" value="7" inputmode="numeric"></div>
+      <div class="row"><label for="likes">공감</label><input id="likes" type="number" min="0" placeholder="24" inputmode="numeric"></div>
+      <div class="row"><label for="cmts">댓글</label><input id="cmts" type="number" min="0" placeholder="7" inputmode="numeric"></div>
     </div>
     <button class="cta" id="save">스토리 이미지 저장</button>
   </div>
@@ -137,11 +138,11 @@ function draw(){
   }
   ctx.filter='none';
   ctx.fillStyle='#777';ctx.font='30px "Nanum Gothic"';ctx.textAlign='center';ctx.textBaseline='top';
-  ctx.fillText(document.getElementById('cap').value,W/2,top+ph+48);
+  {const c=document.getElementById('cap');ctx.fillText(c.value||c.placeholder,W/2,top+ph+48);}
   if(document.getElementById('bar').checked) drawBar();
 }
 function drawBar(){
-  const v=id=>+document.getElementById(id).value||0, y=1725, g='#333';
+  const v=id=>{const e=document.getElementById(id);return e.value===''?+e.placeholder:+e.value||0}, y=1725, g='#333';
   ctx.fillStyle='#fff';ctx.fillRect(0,1635,W,285);
   ctx.fillStyle='#ececec';ctx.fillRect(0,1635,W,2);
   ctx.save();ctx.translate(80,y);ctx.scale(1.2,1.2);ctx.translate(-80,-y);
