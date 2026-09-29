@@ -34,6 +34,13 @@
   button:active,.file:active{transform:scale(.95)}
   button:focus-visible{outline:2px solid var(--focus);outline-offset:2px}
 </style>
+<script>
+// Google Analytics 4 — 측정 ID(G-XXXX)를 넣으면 방문자·MAU 집계 시작
+const GA_ID='G-YW2PXJ52XE';
+if(GA_ID){const t=document.createElement('script');t.async=1;t.src='https://www.googletagmanager.com/gtag/js?id='+GA_ID;document.head.appendChild(t)}
+window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments)}
+gtag('js',new Date());if(GA_ID)gtag('config',GA_ID);
+</script>
 </head>
 <body>
 <main>
@@ -140,13 +147,13 @@ function drawBar(){
   x+=10;ctx.beginPath();ctx.moveTo(x,y-6);ctx.lineTo(x+56,y-26);ctx.lineTo(x+36,y+30);ctx.lineTo(x+26,y+4);ctx.closePath();
   ctx.moveTo(x+26,y+4);ctx.lineTo(x+56,y-26);ctx.stroke();
 }
-document.getElementById('save').onclick=()=>cv.toBlob(async blob=>{
+document.getElementById('save').onclick=()=>{gtag('event','save_story',{layout:mode===1?'single':'four_cut'});cv.toBlob(async blob=>{
   const file=new File([blob],'blog-story.png',{type:'image/png'});
   if(navigator.canShare&&navigator.canShare({files:[file]})){
     try{await navigator.share({files:[file]});return}catch(e){if(e.name==='AbortError')return}
   }
   const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download=file.name;a.click();
-},'image/png');
+},'image/png')};
 document.fonts.load('30px "Nanum Gothic"').then(draw);draw();
 </script>
 </body>
