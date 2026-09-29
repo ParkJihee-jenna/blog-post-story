@@ -44,6 +44,7 @@
     .card{padding:18px 20px;gap:12px}
     .cta{justify-self:stretch;margin-top:8px}
   }
+  @media (min-width:760px){ aside{overflow:visible;max-height:none} }
 </style>
 <script>
 // Google Analytics 4 — 측정 ID(G-XXXX)를 넣으면 방문자·MAU 집계 시작
@@ -168,6 +169,9 @@ document.getElementById('save').onclick=()=>{gtag('event','save_story',{layout:m
   const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download=file.name;a.click();
 },'image/png')};
 document.fonts.load('30px "Nanum Gothic"').then(draw);draw();
+// 미리보기 위·아래를 오른쪽 헤더 윗선·저장 버튼 아랫선에 맞춤
+const fit=()=>{const pv=document.querySelector('.preview');pv.style.height=innerWidth>=760?document.querySelector('aside').offsetHeight+'px':''};
+addEventListener('resize',fit);document.fonts.ready.then(fit);fit();
 </script>
 </body>
 </html>
