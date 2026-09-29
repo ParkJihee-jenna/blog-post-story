@@ -45,6 +45,9 @@
     .cta{justify-self:stretch;margin-top:8px}
   }
   @media (min-width:760px){ aside{overflow:visible;max-height:none} }
+  .row label{padding-left:20px}
+  .row.chk{padding-right:20px}
+  .card.roomy{gap:20px}
 </style>
 <script>
 // Google Analytics 4 — 측정 ID(G-XXXX)를 넣으면 방문자·MAU 집계 시작
@@ -74,11 +77,11 @@ gtag('js',new Date());if(GA_ID)gtag('config',GA_ID);
     <div class="card">
       <div class="title">캡션</div>
       <input id="cap" type="text" value="머리 이쁘다." maxlength="60" aria-label="캡션">
-      <div class="row"><label for="bw">흑백</label><input id="bw" type="checkbox"></div>
+      <div class="row chk"><label for="bw">흑백</label><input id="bw" type="checkbox"></div>
     </div>
-    <div class="card">
+    <div class="card roomy">
       <div class="title">공감 · 댓글 · 공유</div>
-      <div class="row"><label for="bar">하단 바 표시</label><input id="bar" type="checkbox" checked></div>
+      <div class="row chk"><label for="bar">하단 바 표시</label><input id="bar" type="checkbox" checked></div>
       <div class="row"><label for="likes">공감</label><input id="likes" type="number" min="0" value="24" inputmode="numeric"></div>
       <div class="row"><label for="cmts">댓글</label><input id="cmts" type="number" min="0" value="7" inputmode="numeric"></div>
     </div>
