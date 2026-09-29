@@ -63,7 +63,6 @@
       <div class="row"><label for="bar">하단 바 표시</label><input id="bar" type="checkbox" checked></div>
       <div class="row"><label for="likes">공감</label><input id="likes" type="number" min="0" value="24" inputmode="numeric"></div>
       <div class="row"><label for="cmts">댓글</label><input id="cmts" type="number" min="0" value="7" inputmode="numeric"></div>
-      <div class="row"><label for="pg">사진 번호</label><span><input id="pg" type="number" min="1" value="1" inputmode="numeric"> / <input id="pgt" type="number" min="1" value="2" inputmode="numeric"></span></div>
     </div>
     <button class="cta" id="save">스토리 이미지 저장</button>
   </div>
@@ -83,7 +82,7 @@ document.getElementById('file').onchange=async e=>{
   imgs=await Promise.all(files.map(f=>new Promise(r=>{const i=new Image();i.onload=()=>r(i);i.src=URL.createObjectURL(f)})));
   draw();
 };
-['cap','bw','bar','likes','cmts','pg','pgt'].forEach(id=>document.getElementById(id).oninput=draw);
+['cap','bw','bar','likes','cmts'].forEach(id=>document.getElementById(id).oninput=draw);
 
 function cover(img,x,y,w,h){
   const s=Math.max(w/img.width,h/img.height),sw=w/s,sh=h/s;
@@ -140,17 +139,6 @@ function drawBar(){
   // paper plane
   x+=10;ctx.beginPath();ctx.moveTo(x,y-6);ctx.lineTo(x+56,y-26);ctx.lineTo(x+36,y+30);ctx.lineTo(x+26,y+4);ctx.closePath();
   ctx.moveTo(x+26,y+4);ctx.lineTo(x+56,y-26);ctx.stroke();
-  // page pill
-  x+=110;const t=v('pg')+'/'+v('pgt');ctx.font='700 32px "Nanum Gothic"';const pw=110+ctx.measureText(t).width;
-  ctx.fillStyle='#5a5a5c';ctx.beginPath();ctx.roundRect(x,y-40,pw,80,40);ctx.fill();
-  ctx.strokeStyle='#fff';ctx.lineWidth=3.5;ctx.beginPath();ctx.roundRect(x+34,y-18,32,32,5);ctx.stroke();
-  ctx.beginPath();ctx.moveTo(x+38,y+10);ctx.lineTo(x+48,y-2);ctx.lineTo(x+56,y+6);ctx.lineTo(x+62,y);ctx.stroke();
-  ctx.fillStyle='#fff';ctx.fillText(t,x+84,y+2);
-  // right circle (scan)
-  const cx=W-110;ctx.fillStyle='#fff';ctx.beginPath();ctx.arc(cx,y,44,0,7);ctx.fill();
-  ctx.strokeStyle=g;ctx.lineWidth=3.5;ctx.beginPath();
-  for(const[a,b,c,d]of[[-18,-8,-18,-18],[-18,-18,-8,-18],[18,-8,18,-18],[18,-18,8,-18],[-18,8,-18,18],[-18,18,-8,18],[18,8,18,18],[18,18,8,18]]){ctx.moveTo(cx+a,y+b);ctx.lineTo(cx+c,y+d)}
-  for(const[a,b]of[[-9,-5],[-9,1],[-9,7]]){ctx.moveTo(cx+a,y+b);ctx.lineTo(cx+(b===7?5:9),y+b)}ctx.stroke();
 }
 document.getElementById('save').onclick=()=>cv.toBlob(async blob=>{
   const file=new File([blob],'blog-story.png',{type:'image/png'});
