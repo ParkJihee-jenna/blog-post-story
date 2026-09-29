@@ -33,6 +33,17 @@
   button,.file{transition:transform .1s}
   button:active,.file:active{transform:scale(.95)}
   button:focus-visible{outline:2px solid var(--focus);outline-offset:2px}
+  @media (min-width:760px){
+    html,body{height:100%;overflow:hidden}
+    main{max-width:none;height:100dvh;padding:32px;display:flex;gap:56px;align-items:center;justify-content:center}
+    .preview{height:calc(100dvh - 64px);width:auto;margin:0;flex:none}
+    aside{width:360px;max-height:calc(100dvh - 64px);overflow:auto}
+    header{text-align:left;margin-bottom:0}
+    h1{font-size:34px}
+    .panel{margin-top:24px;gap:10px}
+    .card{padding:18px 20px;gap:12px}
+    .cta{justify-self:stretch;margin-top:8px}
+  }
 </style>
 <script>
 // Google Analytics 4 — 측정 ID(G-XXXX)를 넣으면 방문자·MAU 집계 시작
@@ -44,13 +55,12 @@ gtag('js',new Date());if(GA_ID)gtag('config',GA_ID);
 </head>
 <body>
 <main>
+  <div class="preview"><canvas id="cv" width="1080" height="1920"></canvas></div>
+  <aside>
   <header>
     <h1>포스트 쓴 척.</h1>
     <p class="hint">블로그엔 안 올리고, 스토리에만.</p>
   </header>
-
-  <div class="preview"><canvas id="cv" width="1080" height="1920"></canvas></div>
-
   <div class="panel">
     <div class="card">
       <div class="title">레이아웃</div>
@@ -73,6 +83,7 @@ gtag('js',new Date());if(GA_ID)gtag('config',GA_ID);
     </div>
     <button class="cta" id="save">스토리 이미지 저장</button>
   </div>
+  </aside>
 </main>
 <script>
 const W=1080,H=1920,cv=document.getElementById('cv'),ctx=cv.getContext('2d');
