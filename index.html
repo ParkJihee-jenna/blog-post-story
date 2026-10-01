@@ -92,6 +92,9 @@ gtag('js',new Date());if(GA_ID)gtag('config',GA_ID);
   </aside>
 </main>
 <script>
+// 접속할 때마다 캡션 예시 문구를 무작위로 바꿈
+const CAPS=['머리 이쁘다.','그냥 정신 자체가 자유분방한 듯','오늘 날씨 미쳤다.','이 각도 내가 찾음.','사진 잘 나와서 올림.','이 조합 계속 보고 싶다.','기록용.','오늘의 나 칭찬해.','별거 없는 하루였는데 좋았다.','이 표정 뭔데ㅋㅋ'];
+document.getElementById('cap').placeholder=CAPS[Math.floor(Math.random()*CAPS.length)];
 const W=1080,H=1920,cv=document.getElementById('cv'),ctx=cv.getContext('2d');
 let mode=1,imgs=[];const pad0=60;
 
